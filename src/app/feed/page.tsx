@@ -38,11 +38,7 @@ export default function FeedPage() {
   async function loadFeedData() {
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      
-      if (!user) {
-        router.push('/login');
-        return;
-      }
+      if (!user) { router.push('/login'); return; }
 
       const { data: profileData } = await supabase
         .from('profiles')
@@ -50,13 +46,12 @@ export default function FeedPage() {
         .eq('id', user.id)
         .single();
 
-      if (profileData) {
-        setProfile(profileData);
-      }
+      if (profileData) setProfile(profileData);
 
       const { data: eventsData } = await supabase
         .from('events')
         .select('*')
+        .gte('event_date', new Date().toISOString())
         .order('event_date', { ascending: true })
         .limit(5);
 
@@ -69,7 +64,7 @@ export default function FeedPage() {
         .limit(5);
 
       setArtists(artistsData || []);
-      
+
     } catch (error) {
       console.error('Erro a carregar feed:', error);
     } finally {
@@ -80,75 +75,38 @@ export default function FeedPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-600" />
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-black text-indigo-900">DANCEHUB</h1>
-          <div className="flex items-center gap-4">
-  <Link href="/events" className="text-gray-600 hover:text-indigo-600 font-bold">
-    Eventos
-  </Link>
-  <Link href="/artists" className="text-gray-600 hover:text-indigo-600 font-bold">
-    Artistas
-  </Link>
-  <Link href="/profile/me" className="text-gray-600 hover:text-indigo-600 font-bold">
-    Perfil
-  </Link>
-  
-  {!profile ? (
-    <Link 
-      href="/choose-role" 
-      className="bg-indigo-600 text-white px-4 py-2 rounded-xl font-bold hover:bg-indigo-700"
-    >
-      Escolher Papel
-    </Link>
-  ) : profile.user_type === 'artist' ? (
-    <Link 
-      href="/dashboard/artist" 
-      className="bg-indigo-600 text-white px-4 py-2 rounded-xl font-bold hover:bg-indigo-700"
-    >
-      Dashboard Artista
-    </Link>
-  ) : profile.user_type === 'organizer' ? (
-    <Link 
-      href="/dashboard/organizer" 
-      className="bg-purple-600 text-white px-4 py-2 rounded-xl font-bold hover:bg-purple-700"
-    >
-      Dashboard Organizador
-    </Link>
-  ) : (
-    <Link 
-      href="/choose-role" 
-      className="bg-indigo-600 text-white px-4 py-2 rounded-xl font-bold hover:bg-indigo-700"
-    >
-      Ser Artista/Organizador
-    </Link>
-  )}
-</div>
-        </div>
-      </div>
-
       <div className="max-w-4xl mx-auto px-4 py-8">
-        
+
+        {/* Boas-vindas */}
         <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 mb-8">
           <h2 className="text-3xl font-black text-gray-900">
-            Bem-vindo{profile?.artistic_name ? `, ${profile.artistic_name}` : ''}!
+            Bem-vindo{profile?.artistic_name ? `, ${profile.artistic_name}` : ''}! 👋
           </h2>
           <p className="text-gray-600 mt-2">
-            {!profile 
+            {!profile
               ? 'Ainda não tens perfil. Escolhe o teu papel para começar.'
               : 'O que vamos fazer hoje?'}
           </p>
+          {profile?.user_type === 'user' && (
+            <Link
+              href="/choose-role"
+              className="inline-block mt-4 bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-indigo-700 transition-all"
+            >
+              Tornar-me Artista ou Organizador →
+            </Link>
+          )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          
+
+          {/* Próximos Eventos */}
           <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-bold text-gray-900">Próximos Eventos</h3>
@@ -156,28 +114,33 @@ export default function FeedPage() {
                 Ver todos →
               </Link>
             </div>
-            
+
             {events.length === 0 ? (
               <p className="text-gray-400 text-center py-8">Ainda não há eventos</p>
             ) : (
               <div className="space-y-4">
                 {events.map((event) => (
-                  <div key={event.id} className="border-b border-gray-100 pb-4 last:border-0">
+                  <Link
+                    key={event.id}
+                    href={`/events/${event.id}`}
+                    className="block border-b border-gray-100 pb-4 last:border-0 hover:opacity-75 transition-opacity"
+                  >
                     <h4 className="font-bold text-gray-900">{event.title}</h4>
                     <p className="text-sm text-gray-600">
-                      {new Date(event.event_date).toLocaleDateString('pt-PT')} • {event.location}
+                      {new Date(event.event_date).toLocaleDateString('pt-PT')} · {event.location}
                     </p>
                     {event.event_type && (
-                      <span className="inline-block mt-2 text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full">
+                      <span className="inline-block mt-1 text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full">
                         {event.event_type}
                       </span>
                     )}
-                  </div>
+                  </Link>
                 ))}
               </div>
             )}
           </div>
 
+          {/* Artistas */}
           <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-bold text-gray-900">Artistas</h3>
@@ -191,19 +154,27 @@ export default function FeedPage() {
             ) : (
               <div className="space-y-4">
                 {artists.map((artist) => (
-                  <div key={artist.id} className="flex items-center gap-3 border-b border-gray-100 pb-4 last:border-0">
-                    <div className="w-12 h-12 bg-indigo-100 rounded-2xl flex items-center justify-center text-xl font-bold text-indigo-600">
-                      {artist.artistic_name?.charAt(0) || '?'}
+                  <Link
+                    key={artist.id}
+                    href={`/profile/${artist.id}`}
+                    className="flex items-center gap-3 border-b border-gray-100 pb-4 last:border-0 hover:opacity-75 transition-opacity"
+                  >
+                    <div className="w-12 h-12 bg-indigo-100 rounded-2xl flex items-center justify-center text-xl font-bold text-indigo-600 overflow-hidden flex-shrink-0">
+                      {artist.avatar_url
+                        ? <img src={artist.avatar_url} alt="" className="w-full h-full object-cover" />
+                        : artist.artistic_name?.charAt(0) || '?'
+                      }
                     </div>
                     <div>
                       <h4 className="font-bold text-gray-900">{artist.artistic_name || 'Sem nome'}</h4>
                       <p className="text-sm text-gray-600">{artist.current_location || 'Local desconhecido'}</p>
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
             )}
           </div>
+
         </div>
       </div>
     </div>

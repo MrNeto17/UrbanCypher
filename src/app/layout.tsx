@@ -1,21 +1,26 @@
-import './globals.css'
-import Navbar from '@/components/Navbar' // O '@' aponta para a pasta 'src'
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
+import Navbar from '@/components/Navbar';
 
-export const metadata = {
-  title: 'DanceHub - Comunidade de Dança',
-  description: 'Eventos e Freelance para bailarinos em Portugal',
-}
+const inter = Inter({ subsets: ['latin'] });
+
+export const metadata: Metadata = {
+  title: 'DANCEHUB',
+  description: 'Comunidade de dança urbana em Portugal',
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="pt">
-      <body className="bg-gray-50">
-        <main>{children}</main>
+      <body className={inter.className}>
+        <Navbar />
+        {children}
       </body>
     </html>
-  )
+  );
 }

@@ -8,43 +8,33 @@ import Link from 'next/link';
 export default function RegisterPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
+  const [confirm, setConfirm] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     setError('');
 
+    if (password !== confirm) {
+      setError('As passwords não coincidem.');
+      return;
+    }
+    if (password.length < 6) {
+      setError('A password tem de ter pelo menos 6 caracteres.');
+      return;
+    }
+
+    setLoading(true);
+
     try {
-      // 1. Criar user no Auth
-      const { data: authData, error: authError } = await supabase.auth.signUp({ 
-        email, 
-        password 
-      });
-      
-      if (authError) throw authError;
-      if (!authData.user) throw new Error('Erro ao criar user');
+      const { error } = await supabase.auth.signUp({ email, password });
+      if (error) throw error;
 
-      // 2. Criar perfil automaticamente
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .insert({
-          id: authData.user.id,      // MESMO ID do auth
-          email: email,
-          full_name: name,
-          user_type: 'user',
-          created_at: new Date(),
-          updated_at: new Date()
-        });
+      // Redirecionar para escolher papel
+      router.push('/choose-role');
 
-      if (profileError) throw profileError;
-
-      // 3. Redirecionar para feed
-      router.push('/feed');
-      
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -55,62 +45,65 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
       <div className="max-w-md w-full bg-white rounded-3xl shadow-xl p-8">
-        <h2 className="text-3xl font-black text-indigo-900 text-center mb-2">CRIAR CONTA</h2>
-        <p className="text-gray-500 text-center mb-8">Regista-te para começares</p>
-        
+        <div className="text-center mb-8">
+          <span className="text-5xl">🕺</span>
+          <h2 className="text-3xl font-black text-indigo-900 mt-3">CRIAR CONTA</h2>
+          <p className="text-gray-500 mt-2">Junta-te à comunidade urbana portuguesa</p>
+        </div>
+
         <form onSubmit={handleRegister} className="space-y-4">
           <div>
-            <label className="block text-sm font-bold text-gray-700 mb-2">Nome</label>
-            <input 
-              type="text" 
+            <label className="block text-sm font-bold text-gray-700 mb-1">Email</label>
+            <input
+              type="email"
               required
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500"
-              placeholder="O teu nome"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-bold text-gray-700 mb-2">Email</label>
-            <input 
-              type="email" 
-              required
+              placeholder="o_teu@email.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500"
-              placeholder="teu@email.com"
+              className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-black"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-bold text-gray-700 mb-2">Password</label>
-            <input 
-              type="password" 
+            <label className="block text-sm font-bold text-gray-700 mb-1">Password</label>
+            <input
+              type="password"
               required
+              placeholder="Mínimo 6 caracteres"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500"
-              placeholder="******"
+              className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-black"
             />
           </div>
-          
+
+          <div>
+            <label className="block text-sm font-bold text-gray-700 mb-1">Confirmar Password</label>
+            <input
+              type="password"
+              required
+              placeholder="Repete a password"
+              value={confirm}
+              onChange={(e) => setConfirm(e.target.value)}
+              className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-black"
+            />
+          </div>
+
           {error && (
-            <p className="text-red-500 text-sm font-bold">{error}</p>
+            <p className="text-red-500 text-sm font-bold">❌ {error}</p>
           )}
-          
-          <button 
+
+          <button
             type="submit"
             disabled={loading}
-            className="w-full bg-indigo-600 text-white py-4 rounded-xl font-bold hover:bg-indigo-700 transition-all disabled:bg-gray-300"
+            className="w-full bg-indigo-600 text-white py-4 rounded-xl font-bold text-lg hover:bg-indigo-700 transition-all disabled:opacity-60"
           >
-            {loading ? 'A CRIAR...' : 'REGISTAR'}
+            {loading ? 'A CRIAR CONTA...' : 'CRIAR CONTA'}
           </button>
-          
-          <p className="text-center text-gray-600">
+
+          <p className="text-center text-gray-600 text-sm">
             Já tens conta?{' '}
             <Link href="/login" className="text-indigo-600 font-bold hover:underline">
-              Login
+              Entra aqui
             </Link>
           </p>
         </form>
