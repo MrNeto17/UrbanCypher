@@ -8,7 +8,8 @@ import Link from 'next/link';
 export default function ChooseRolePage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState(null);
+  // ✅ null = ainda a verificar, false = não autenticado, objeto = autenticado
+  const [authChecked, setAuthChecked] = useState(false);
 
   useEffect(() => {
     checkUser();
@@ -17,43 +18,50 @@ export default function ChooseRolePage() {
   async function checkUser() {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
-      router.push('/login');
+      // Redireciona imediatamente, sem mostrar a página
+      router.replace('/login');
       return;
     }
-    setUser(user);
+    setAuthChecked(true);
   }
 
   async function chooseRole(role: 'artist' | 'organizer') {
     setLoading(true);
-    
+
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+      if (!user) {
+        router.replace('/login');
+        return;
+      }
 
-      // Atualizar o tipo de user
       const { error } = await supabase
         .from('profiles')
-        .update({ 
+        .update({
           user_type: role,
-          updated_at: new Date()
+          updated_at: new Date(),
         })
         .eq('id', user.id);
 
       if (error) throw error;
 
-      // Redirecionar para o onboarding específico
-      if (role === 'artist') {
-        router.push('/onboarding/artist');
-      } else {
-        router.push('/onboarding/organizer');
-      }
-      
+      router.push(role === 'artist' ? '/onboarding/artist' : '/onboarding/organizer');
+
     } catch (error) {
       console.error('Erro:', error);
       alert('Erro ao escolher tipo');
     } finally {
       setLoading(false);
     }
+  }
+
+  // ✅ Enquanto verifica auth, mostra spinner (evita flash da página para não-autenticados)
+  if (!authChecked) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-600" />
+      </div>
+    );
   }
 
   return (
@@ -63,7 +71,6 @@ export default function ChooseRolePage() {
         <p className="text-center text-gray-600 mb-12">Como queres participar na comunidade?</p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          
           {/* ARTISTA */}
           <div className="bg-white rounded-3xl p-8 shadow-xl border border-gray-100 hover:shadow-2xl transition-all">
             <div className="text-6xl mb-4">🕺</div>
@@ -80,7 +87,7 @@ export default function ChooseRolePage() {
             <button
               onClick={() => chooseRole('artist')}
               disabled={loading}
-              className="w-full bg-indigo-600 text-white py-4 rounded-xl font-bold text-lg hover:bg-indigo-700 transition-all"
+              className="w-full bg-indigo-600 text-white py-4 rounded-xl font-bold text-lg hover:bg-indigo-700 transition-all disabled:opacity-60"
             >
               {loading ? 'A processar...' : 'Sou Artista'}
             </button>
@@ -102,17 +109,16 @@ export default function ChooseRolePage() {
             <button
               onClick={() => chooseRole('organizer')}
               disabled={loading}
-              className="w-full bg-purple-600 text-white py-4 rounded-xl font-bold text-lg hover:bg-purple-700 transition-all"
+              className="w-full bg-purple-600 text-white py-4 rounded-xl font-bold text-lg hover:bg-purple-700 transition-all disabled:opacity-60"
             >
               {loading ? 'A processar...' : 'Sou Organizador'}
             </button>
           </div>
         </div>
 
-        {/* Opção para ficar só user */}
         <div className="text-center mt-8">
-          <Link 
-            href="/feed" 
+          <Link
+            href="/feed"
             className="text-gray-500 hover:text-gray-700 font-bold"
           >
             Por agora quero só ver eventos (ser user normal)
