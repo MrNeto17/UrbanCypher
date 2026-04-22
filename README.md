@@ -1,110 +1,161 @@
-# 🕺 DANCEHUB - Comunidade de Dança Urbana
+# 🕺 DANCEHUB — Urban Dance Community
 
-![Status](https://img.shields.io/badge/status-em%20desenvolvimento-green)
-![Next.js](https://img.shields.io/badge/Next.js-14-black)
-![Supabase](https://img.shields.io/badge/Supabase-3ECF8E)
-![TypeScript](https://img.shields.io/badge/TypeScript-3178C6)
+[![CI](https://github.com/MrNeto17/DanceWebsiteProj/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/MrNeto17/DanceWebsiteProj/actions/workflows/ci.yml)
+[![Vercel](https://img.shields.io/badge/deploy-vercel-black?logo=vercel)](https://dancehub.vercel.app)
+![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=nextdotjs)
+![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?logo=supabase&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
+![Tailwind](https://img.shields.io/badge/TailwindCSS-4-38BDF8?logo=tailwindcss&logoColor=white)
+![License](https://img.shields.io/badge/license-MIT-blue)
 
-> **"Unindo a cena urbana portuguesa, um passo de cada vez."**
+> **"Bringing the Portuguese urban scene together, one step at a time."**
 
-## 📋 Sobre o Projeto
-
-O **DANCEHUB** é uma plataforma centralizadora para a comunidade de dança urbana em Portugal. O objetivo é conectar artistas, organizadores e o público geral num ecossistema digital único e intuitivo.
-
-### 🚩 O Problema
-Atualmente, a cena urbana em Portugal encontra-se fragmentada:
-* **Promoção:** Artistas não têm um portfólio centralizado.
-* **Descoberta:** Organizadores têm dificuldade em encontrar novos talentos.
-* **Divulgação:** Battles e workshops perdem-se em grupos de WhatsApp ou stories de Instagram.
-* **Opacidade:** Falta de transparência em preços e condições de participação.
-
-### 💡 A Solução
-Um hub central onde:
-* 🎯 **Artistas:** Criam perfis profissionais, definem preços e gerem o seu portfólio.
-* 🎪 **Organizadores:** Criam e gerem eventos, battles e workshops com facilidade.
-* 👥 **Público:** Descobre a agenda cultural urbana da sua cidade.
+🔗 **Live Demo:** [dancehub.vercel.app](https://dancehub.vercel.app) *(MOCKUP: replace with your real Vercel URL)*
 
 ---
 
-## 🚀 Funcionalidades
-
-### ✅ Implementadas
-- [x] **Autenticação:** Sistema completo via email (Supabase Auth).
-- [x] **Gestão de Perfis:** Distinção entre utilizador comum, artista e organizador.
-- [x] **Feed da Comunidade:** Mural interativo para atualizações.
-- [x] **Onboarding:** Fluxo personalizado para novos perfis profissionais.
-- [x] **Perfis Públicos:** Visualização dinâmica via `/profile/[id]`.
-
-### 🏗️ Em Desenvolvimento
-- [ ] **Sistema de Brackets:** Gestão automática de chaves para battles.
-- [ ] **Inscrições Online:** Pagamento e reserva de lugar em workshops.
-- [ ] **Ratings & Reviews:** Sistema de feedback para eventos e artistas.
-- [ ] **Calendário Interativo:** Filtro de eventos por cidade e estilo.
+<!-- MOCKUP: replace with real landing screenshot/gif -->
+<p align="center">
+  <img src="https://via.placeholder.com/1200x600/000000/FACC15?text=DANCEHUB+—+THE+WHOLE+SCENE+IN+ONE+PLACE" alt="DANCEHUB preview" />
+</p>
 
 ---
 
-## 🛠️ Stack Tecnológica
+## 📋 About the Project
 
-| Componente | Tecnologia |
+**DANCEHUB** is a centralized platform for the urban dance community in Portugal. The goal is to connect artists, event organizers, and the general public in a single, intuitive digital ecosystem.
+
+### 🚩 The Problem
+The Portuguese urban dance scene is fragmented:
+- **Promotion:** Artists have no centralized portfolio.
+- **Discovery:** Organizers struggle to find new talent.
+- **Visibility:** Battles and workshops get lost in WhatsApp groups and Instagram stories.
+- **Opacity:** Lack of transparency around pricing and participation terms.
+
+### 💡 The Solution
+A central hub where:
+- 🎯 **Artists** create professional profiles, set prices, and manage their portfolio.
+- 🎪 **Organizers** create and manage events, battles, and workshops.
+- 👥 **The public** discovers the urban cultural agenda in their city.
+
+---
+
+## 🚀 Features
+
+### ✅ Shipped
+- [x] **Authentication** via email (Supabase Auth)
+- [x] **Profiles** with distinction between user, artist, and organizer
+- [x] **Community feed**
+- [x] **Onboarding flows** tailored per account type
+- [x] **Public profiles** at `/profile/[id]`
+- [x] **Event management** (create, edit, detail view)
+- [x] **CI/CD** with GitHub Actions + branch protection on `main`
+- [x] **Error monitoring** with Sentry
+
+### 🏗️ In Progress
+- [ ] **Bracket system** for battles
+- [ ] **Registrations and payments** for workshops
+- [ ] **Ratings & reviews**
+- [ ] **Interactive calendar** with filters by city and style
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
 | :--- | :--- |
-| **Frontend** | Next.js 14 (App Router) |
-| **Estilização** | Tailwind CSS |
-| **Backend/DB** | Supabase (Auth, DB, Storage) |
-| **Linguagem** | TypeScript |
-| **Deploy** | Vercel |
+| **Frontend** | Next.js 16 (App Router) + React 19 |
+| **Language** | TypeScript |
+| **Styling** | Tailwind CSS v4 |
+| **Backend / DB** | Supabase (Auth, Postgres, Storage) |
+| **Monitoring** | Sentry |
+| **CI/CD** | GitHub Actions |
+| **Deployment** | Vercel |
 
 ---
 
-## 📁 Estrutura do Projeto
+## 🎨 Design
+
+DANCEHUB embraces a **raw and direct** visual language, inspired by battle flyers and underground event posters — solid black, electric yellow as the accent, and heavy uppercase typography. The choice is intentional: move away from the generic "SaaS look" and reflect the identity of urban culture.
+
+<!-- MOCKUP: replace with real screenshots -->
+<table>
+  <tr>
+    <td align="center"><strong>Landing</strong><br/><img src="https://via.placeholder.com/400x250/000000/FACC15?text=Landing" /></td>
+    <td align="center"><strong>Feed</strong><br/><img src="https://via.placeholder.com/400x250/000000/FACC15?text=Feed" /></td>
+    <td align="center"><strong>Profile</strong><br/><img src="https://via.placeholder.com/400x250/000000/FACC15?text=Profile" /></td>
+  </tr>
+</table>
+
+---
+
+## 📁 Project Structure
 
 ```text
-dancehub/
+src/
 ├── app/
-│   ├── artists/          # Listagem de profissionais
-│   ├── events/           # Hub de eventos e competições
-│   ├── feed/             # Timeline da comunidade
-│   ├── login/ /register/ # Fluxos de acesso
-│   ├── profile/          # Gestão e visualização de perfis
-│   ├── onboarding/       # Setup de conta (artista/org)
-│   └── choose-role/      # Seleção de tipo de conta
-├── components/           # Componentes UI reutilizáveis
-├── lib/                  # Configurações (Supabase client, etc)
-└── public/               # Assets e imagens estáticas
+│   ├── artists/              # Artist listing
+│   ├── events/               # Events (list, detail, create, edit)
+│   ├── feed/                 # Community timeline
+│   ├── login/  register/     # Authentication flows
+│   ├── onboarding/           # Account type setup
+│   ├── choose-role/          # Role selection
+│   ├── profile/              # Public profiles and editing
+│   └── workshops/            # Workshop hub
+├── components/               # Reusable UI (Navbar, selectors...)
+├── lib/                      # Supabase client, constants
+└── public/                   # Static assets
 ```
 
 ---
 
-## 🎯 Diferenciais
+## 🎯 Differentiators
 
-* **🇵🇹 Foco em Portugal:** Curadoria específica para cidades como Lisboa, Porto, Coimbra, Faro e Braga.
-* **💰 Transparência:** Preços de workshops e participações visíveis antes da inscrição.
-* **🎨 UI Clean:** Experiência focada no conteúdo, sem distrações desnecessárias.
-* **📱 Mobile First:** Otimizado para ser usado no telemóvel.
+- **🇵🇹 Portugal-focused:** curated for cities like Lisbon, Porto, Coimbra, Faro, and Braga.
+- **💰 Transparency:** workshop and participation prices are visible before sign-up.
+- **🎨 Distinct identity:** design rooted in urban culture, not another generic template.
+- **📱 Mobile-first:** built to be used on the phone.
+- **🛡️ Production-ready workflow:** enforced CI checks, protected `main`, automatic preview deploys on every PR.
 
 ---
 
-## 🚦 Como Correr o Projeto
+## 🚦 Getting Started
 
 ```bash
- 1. Clonar o repositório
-git clone https://github.com/teu-repo/dancehub.git
+# 1. Clone the repository
+git clone https://github.com/MrNeto17/DanceWebsiteProj.git
+cd DanceWebsiteProj
 
- 2. Instalar dependências
+# 2. Install dependencies
 npm install
 
- 3. Configurar variáveis de ambiente
+# 3. Set up environment variables
 cp .env.local.example .env.local
+# fill in NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY
 
- 4. Correr em desenvolvimento
+# 4. Run the dev server
 npm run dev
 ```
 
+Open [http://localhost:3000](http://localhost:3000) to see the app.
+
 ---
 
-## 📊 Modelo de Dados (Preview)
+## 🧪 Development Workflow
+
+Every PR to `main` is validated automatically:
+
+1. **GitHub Actions** runs `npm ci` and `npm run build` (full type-check included).
+2. **Branch protection** blocks merging until the build passes.
+3. **Vercel** deploys a preview URL for every PR — each change is instantly browsable in production-like conditions.
+4. On merge to `main`, Vercel deploys to production automatically.
+
+---
+
+## 📊 Data Model (Preview)
 
 ```sql
--- Perfis de Utilizador
+-- User profiles
 CREATE TABLE profiles (
   id uuid REFERENCES auth.users ON DELETE CASCADE,
   full_name text,
@@ -117,25 +168,28 @@ CREATE TABLE profiles (
 
 ---
 
-## 🤝 Como Contribuir
+## 🤝 Contributing
 
-1. Faz **fork** do projeto.
-2. Cria uma **branch** (`git checkout -b feature/nova-feature`).
-3. Faz **commit** (`git commit -m 'feat: add nova funcionalidade'`).
-4. **Push** (`git push origin feature/nova-feature`).
-5. Abre um **Pull Request**.
-
----
-
-## 👥 Autores
-
-* **Zé** - *Desenvolvedor Full-stack & B-boy*
+1. **Fork** the project.
+2. Create a **branch** (`git checkout -b feature/new-feature`).
+3. **Commit** your changes (`git commit -m 'feat: add new feature'`).
+4. **Push** to the branch (`git push origin feature/new-feature`).
+5. Open a **Pull Request**.
 
 ---
 
-## 📝 Licença
+## 👥 Author
 
-Este projeto está sob a licença MIT.
+- **Zé** — *Full-stack Developer & B-boy*
+  - [LinkedIn](https://linkedin.com/in/YOUR-HANDLE) *(MOCKUP)*
+  - [GitHub](https://github.com/MrNeto17)
 
 ---
-⭐ **Dá uma estrela ao projeto se achaste interessante!**
+
+## 📝 License
+
+This project is licensed under the MIT License.
+
+---
+
+⭐ **Star the project if you find it interesting!**

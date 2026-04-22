@@ -1,6 +1,8 @@
 import Link from 'next/link';
 
-export default function LandingPage() {
+// VARIANTE A — BATALHA
+// Preto + amarelo elétrico, cantos retos, energia de flyer de battle
+export default function PreviewA() {
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden" style={{ fontFamily: 'Arial Black, Arial, sans-serif' }}>
 

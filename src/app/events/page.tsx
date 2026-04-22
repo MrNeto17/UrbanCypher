@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import supabase from '../../lib/supabase';
+import { ESTILOS_DANCA } from '../../lib/constants';
 import Link from 'next/link';
 
 type Event = {
@@ -12,12 +13,15 @@ type Event = {
   location: string;
   event_type: string;
   price: number;
+  styles: string[];
+  battle_format: string | null;
 };
 
-const EVENT_TYPES = ['battle', 'workshop', 'cypher', 'jam', 'other'];
 const EVENT_TYPE_LABELS: Record<string, string> = {
   battle: 'Battle', workshop: 'Workshop', cypher: 'Cypher', jam: 'Jam', other: 'Outro',
 };
+
+const BATTLE_FORMATS = ['1v1', '2v2', '3v3', 'crew', 'solo'];
 
 function EventCard({ event, past = false }: { event: Event; past?: boolean }) {
   const date = new Date(event.event_date);
@@ -33,14 +37,27 @@ function EventCard({ event, past = false }: { event: Event; past?: boolean }) {
               {date.toLocaleDateString('pt-PT', { day: '2-digit', month: 'short' })}
             </p>
           </div>
-          {event.event_type && (
-            <span className="text-xs font-bold px-3 py-1 rounded-full bg-white/20 text-white">
+          <div className="flex flex-col items-end gap-1">
+            <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-white/20 text-white">
               {EVENT_TYPE_LABELS[event.event_type] ?? event.event_type}
             </span>
-          )}
+            {event.battle_format && (
+              <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-white/30 text-white">
+                {event.battle_format.toUpperCase()}
+              </span>
+            )}
+          </div>
         </div>
         <div className="p-6 flex flex-col flex-1">
           <h2 className="text-xl font-black text-gray-900 mb-2">{event.title}</h2>
+          {event.styles?.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 mb-3">
+              {event.styles.slice(0, 3).map(s => (
+                <span key={s} className="text-xs font-bold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700">{s}</span>
+              ))}
+              {event.styles.length > 3 && <span className="text-xs text-gray-400">+{event.styles.length - 3}</span>}
+            </div>
+          )}
           {event.description && (
             <p className="text-gray-500 text-sm line-clamp-2 mb-4">{event.description}</p>
           )}
@@ -69,6 +86,8 @@ export default function EventsPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [tipo, setTipo] = useState('');
+  const [estilo, setEstilo] = useState('');
+  const [formato, setFormato] = useState('');
   const [tab, setTab] = useState<'upcoming' | 'past'>('upcoming');
 
   useEffect(() => {
@@ -91,10 +110,15 @@ export default function EventsPage() {
 
   const filtered = activeList
     .filter(e => !tipo || e.event_type === tipo)
+    .filter(e => !estilo || e.styles?.includes(estilo))
+    .filter(e => !formato || e.battle_format === formato)
     .filter(e => !search.trim() ||
       e.title?.toLowerCase().includes(search.toLowerCase()) ||
       e.location?.toLowerCase().includes(search.toLowerCase())
     );
+
+  // Só mostra filtro de formato quando tipo = battle
+  const showFormatFilter = tipo === 'battle' || (!tipo && activeList.some(e => e.event_type === 'battle'));
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -105,7 +129,7 @@ export default function EventsPage() {
           <p className="text-gray-500">Battles, workshops e cyphers por todo o país.</p>
         </div>
 
-        {/* Pesquisa + filtro tipo */}
+        {/* Filtros */}
         <div className="flex flex-col sm:flex-row gap-3 mb-6">
           <input
             type="text"
@@ -114,34 +138,44 @@ export default function EventsPage() {
             placeholder="Pesquisar evento ou cidade..."
             className="flex-1 p-3 bg-white border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-black shadow-sm"
           />
-          <select
-            value={tipo}
-            onChange={e => setTipo(e.target.value)}
-            className="p-3 bg-white border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-black shadow-sm"
-          >
+          <select value={tipo} onChange={e => { setTipo(e.target.value); setFormato(''); }}
+            className="p-3 bg-white border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-black shadow-sm">
             <option value="">Todos os tipos</option>
-            {EVENT_TYPES.map(t => (
-              <option key={t} value={t}>{EVENT_TYPE_LABELS[t]}</option>
+            {Object.entries(EVENT_TYPE_LABELS).map(([v, l]) => (
+              <option key={v} value={v}>{l}</option>
             ))}
           </select>
+          <select value={estilo} onChange={e => setEstilo(e.target.value)}
+            className="p-3 bg-white border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-black shadow-sm">
+            <option value="">Todos os estilos</option>
+            {ESTILOS_DANCA.map(e => (
+              <option key={e} value={e}>{e}</option>
+            ))}
+          </select>
+          {/* Formato de battle — só aparece quando relevante */}
+          {(tipo === 'battle' || tipo === '') && (
+            <select value={formato} onChange={e => setFormato(e.target.value)}
+              className="p-3 bg-white border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-black shadow-sm">
+              <option value="">Todos os formatos</option>
+              {BATTLE_FORMATS.map(f => (
+                <option key={f} value={f}>{f.toUpperCase()}</option>
+              ))}
+            </select>
+          )}
         </div>
 
         {/* Tabs */}
         <div className="flex gap-2 mb-8">
-          <button
-            onClick={() => setTab('upcoming')}
+          <button onClick={() => setTab('upcoming')}
             className={`px-6 py-2.5 rounded-full font-bold text-sm transition-all ${
               tab === 'upcoming' ? 'bg-indigo-600 text-white shadow-md' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
-            }`}
-          >
+            }`}>
             Próximos {upcoming.length > 0 && `(${upcoming.length})`}
           </button>
-          <button
-            onClick={() => setTab('past')}
+          <button onClick={() => setTab('past')}
             className={`px-6 py-2.5 rounded-full font-bold text-sm transition-all ${
               tab === 'past' ? 'bg-gray-700 text-white shadow-md' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
-            }`}
-          >
+            }`}>
             Passados {past.length > 0 && `(${past.length})`}
           </button>
         </div>

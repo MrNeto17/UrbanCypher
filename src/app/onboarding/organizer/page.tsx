@@ -84,23 +84,26 @@ export default function OrganizerOnboarding() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
-      <div className="max-w-md w-full bg-white rounded-3xl shadow-xl p-8">
-        <div className="text-center mb-8">
-          <span className="text-6xl mb-4 block">🎪</span>
-          <h2 className="text-3xl font-black text-purple-900">PERFIL DE ORGANIZADOR</h2>
-          <p className="text-gray-500 mt-2">Cria e gere eventos na comunidade</p>
+    <div className="min-h-screen bg-black text-white flex items-center justify-center p-6" style={{ fontFamily: 'Arial Black, Arial, sans-serif' }}>
+      <div className="max-w-md w-full border border-white/10 p-10">
+        <div className="text-center mb-10">
+          <span className="text-xs font-black text-yellow-400 uppercase tracking-[0.3em]">— Passo 1 de 1</span>
+          <h2 className="text-3xl font-black uppercase tracking-tight mt-4">
+            PERFIL DE<br />
+            <span className="text-yellow-400">ORGANIZADOR.</span>
+          </h2>
+          <p className="text-gray-500 text-xs uppercase tracking-widest mt-3">Cria e gere eventos na cena</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Avatar */}
           <div className="flex flex-col items-center mb-6">
             <label className="cursor-pointer group">
-              <div className="w-24 h-24 bg-purple-50 rounded-2xl border-2 border-dashed border-purple-200 flex items-center justify-center overflow-hidden group-hover:border-purple-400 transition-all">
+              <div className="w-28 h-28 bg-white/5 border-2 border-dashed border-white/20 flex items-center justify-center overflow-hidden group-hover:border-yellow-400 transition-all">
                 {file ? (
                   <img src={URL.createObjectURL(file)} alt="Preview" className="w-full h-full object-cover" />
                 ) : (
-                  <span className="text-purple-400 text-xs font-bold text-center p-2">Upload Logo</span>
+                  <span className="text-gray-500 text-[10px] font-black uppercase tracking-widest text-center p-2">Upload<br />Logo</span>
                 )}
               </div>
               <input type="file" accept="image/*" className="hidden" onChange={(e) => setFile(e.target.files?.[0] || null)} />
@@ -108,52 +111,52 @@ export default function OrganizerOnboarding() {
           </div>
 
           <div>
-            <label className="block text-sm font-bold text-gray-700 ml-1">Nome / Crew</label>
+            <label className="block text-[10px] font-black text-yellow-400 uppercase tracking-[0.25em] mb-2">Nome / Crew</label>
             <input
               type="text" required value={nome}
-              className="w-full p-3 bg-gray-50 border-none rounded-xl mt-1 text-black focus:ring-2 focus:ring-purple-500 outline-none"
+              className="w-full p-4 bg-white/5 border border-white/10 outline-none focus:border-yellow-400 text-white placeholder:text-gray-600"
               onChange={(e) => setNome(e.target.value)}
             />
           </div>
 
           <div>
-            <label className="block text-sm font-bold text-gray-700 ml-1">Distrito</label>
+            <label className="block text-[10px] font-black text-yellow-400 uppercase tracking-[0.25em] mb-2">Distrito</label>
             <select
               value={cidade}
-              className="w-full p-3 bg-gray-50 border-none rounded-xl mt-1 text-black focus:ring-2 focus:ring-purple-500 outline-none"
+              className="w-full p-4 bg-white/5 border border-white/10 outline-none focus:border-yellow-400 text-white"
               onChange={(e) => setCidade(e.target.value)}
             >
               {DISTRITOS_PORTUGAL.map(d => (
-                <option key={d} value={d}>{d}</option>
+                <option key={d} value={d} className="bg-black">{d}</option>
               ))}
             </select>
           </div>
 
           <div>
-            <label className="block text-sm font-bold text-gray-700 ml-1">Nome da Organização (opcional)</label>
+            <label className="block text-[10px] font-black text-yellow-400 uppercase tracking-[0.25em] mb-2">Nome da Organização (opcional)</label>
             <input
               type="text" value={organizacao}
-              className="w-full p-3 bg-gray-50 border-none rounded-xl mt-1 text-black focus:ring-2 focus:ring-purple-500 outline-none"
+              className="w-full p-4 bg-white/5 border border-white/10 outline-none focus:border-yellow-400 text-white placeholder:text-gray-600"
               onChange={(e) => setOrganizacao(e.target.value)}
               placeholder="Ex: Breaking Lx"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-bold text-gray-700 ml-1">Telefone (opcional)</label>
+            <label className="block text-[10px] font-black text-yellow-400 uppercase tracking-[0.25em] mb-2">Telefone (opcional)</label>
             <input
               type="tel" value={telefone}
-              className="w-full p-3 bg-gray-50 border-none rounded-xl mt-1 text-black focus:ring-2 focus:ring-purple-500 outline-none"
+              className="w-full p-4 bg-white/5 border border-white/10 outline-none focus:border-yellow-400 text-white placeholder:text-gray-600"
               onChange={(e) => setTelefone(e.target.value)}
               placeholder="912345678"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-bold text-gray-700 ml-1">Website (opcional)</label>
+            <label className="block text-[10px] font-black text-yellow-400 uppercase tracking-[0.25em] mb-2">Website (opcional)</label>
             <input
               type="url" value={website}
-              className="w-full p-3 bg-gray-50 border-none rounded-xl mt-1 text-black focus:ring-2 focus:ring-purple-500 outline-none"
+              className="w-full p-4 bg-white/5 border border-white/10 outline-none focus:border-yellow-400 text-white placeholder:text-gray-600"
               onChange={(e) => setWebsite(e.target.value)}
               placeholder="https://..."
             />
@@ -161,13 +164,13 @@ export default function OrganizerOnboarding() {
 
           <button
             type="submit" disabled={loading}
-            className="w-full bg-purple-600 text-white py-4 rounded-2xl font-black text-lg hover:bg-purple-700 disabled:bg-gray-300 transition-all"
+            className="w-full bg-yellow-400 text-black py-4 font-black text-base uppercase tracking-widest hover:bg-yellow-300 disabled:opacity-60 transition-all"
           >
-            {loading ? 'A GUARDAR...' : 'TORNAR-ME ORGANIZADOR'}
+            {loading ? 'A GUARDAR...' : 'TORNAR-ME ORGANIZADOR →'}
           </button>
 
           {errorMsg && (
-            <p className="text-red-500 text-sm font-bold text-center">❌ {errorMsg}</p>
+            <p className="text-red-400 text-xs font-black text-center uppercase tracking-widest">— {errorMsg}</p>
           )}
         </form>
       </div>
