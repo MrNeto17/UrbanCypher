@@ -14,7 +14,6 @@ export default function LoginPage() {
   const router = useRouter();
 
   useEffect(() => {
-    // Se já está autenticado, vai para o feed
     supabase.auth.getUser().then(({ data: { user } }) => {
       if (user) router.replace('/feed');
       else setChecking(false);
@@ -39,51 +38,52 @@ export default function LoginPage() {
 
   if (checking) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-600" />
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="animate-spin h-12 w-12 border-t-2 border-b-2 border-yellow-400" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
-      <div className="max-w-md w-full bg-white rounded-3xl shadow-xl p-8">
-        <div className="text-center mb-8">
-          <Link href="/" className="text-2xl font-black text-indigo-900">DANCEHUB</Link>
-          <h2 className="text-3xl font-black text-gray-900 mt-4 mb-1">Bem-vindo de volta</h2>
-          <p className="text-gray-500">Acede à tua conta</p>
+    <div className="min-h-screen bg-black text-white flex items-center justify-center p-6" style={{ fontFamily: 'Arial Black, Arial, sans-serif' }}>
+      <div className="max-w-md w-full border border-white/10 p-10">
+        <div className="text-center mb-10">
+          <Link href="/" className="text-xl font-black text-yellow-400 uppercase tracking-widest">DANCEHUB</Link>
+          <div className="w-8 h-0.5 bg-yellow-400 mx-auto my-6" />
+          <h2 className="text-3xl font-black text-white uppercase tracking-tight">Bem-vindo de volta</h2>
+          <p className="text-gray-500 text-xs uppercase tracking-widest mt-2">Acede à tua conta</p>
         </div>
 
-        <form onSubmit={handleLogin} className="space-y-4">
+        <form onSubmit={handleLogin} className="space-y-5">
           <div>
-            <label className="block text-sm font-bold text-gray-700 mb-1">Email</label>
+            <label className="block text-[10px] font-black text-yellow-400 uppercase tracking-[0.25em] mb-2">Email</label>
             <input
               type="email" required placeholder="o_teu@email.com" value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-black"
+              className="w-full p-4 bg-white/5 border border-white/10 outline-none focus:border-yellow-400 text-white placeholder:text-gray-600"
             />
           </div>
           <div>
-            <label className="block text-sm font-bold text-gray-700 mb-1">Password</label>
+            <label className="block text-[10px] font-black text-yellow-400 uppercase tracking-[0.25em] mb-2">Password</label>
             <input
               type="password" required placeholder="A tua password" value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-black"
+              className="w-full p-4 bg-white/5 border border-white/10 outline-none focus:border-yellow-400 text-white placeholder:text-gray-600"
             />
           </div>
 
-          {error && <p className="text-red-500 text-sm font-bold">❌ {error}</p>}
+          {error && <p className="text-red-400 text-xs font-black uppercase tracking-widest">— {error}</p>}
 
           <button
             type="submit" disabled={loading}
-            className="w-full bg-indigo-600 text-white py-4 rounded-xl font-bold text-lg hover:bg-indigo-700 transition-all disabled:opacity-60"
+            className="w-full bg-yellow-400 text-black py-4 font-black text-base uppercase tracking-widest hover:bg-yellow-300 transition-all disabled:opacity-60"
           >
-            {loading ? 'A entrar...' : 'Entrar'}
+            {loading ? 'A entrar...' : 'Entrar →'}
           </button>
 
-          <p className="text-center text-gray-600 text-sm">
+          <p className="text-center text-gray-500 text-xs uppercase tracking-widest pt-4 border-t border-white/10">
             Não tens conta?{' '}
-            <Link href="/register" className="text-indigo-600 font-bold hover:underline">
+            <Link href="/register" className="text-yellow-400 font-black hover:text-yellow-300">
               Regista-te grátis
             </Link>
           </p>

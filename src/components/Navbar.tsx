@@ -20,7 +20,7 @@ export default function Navbar() {
 
   useEffect(() => {
     loadUser();
-  }, [pathname]); // recarrega ao mudar de página
+  }, [pathname]);
 
   async function loadUser() {
     const { data: { user } } = await supabase.auth.getUser();
@@ -47,32 +47,31 @@ export default function Navbar() {
   const navLink = (href: string, label: string) => (
     <Link
       href={href}
-      className={`font-bold transition-colors ${
+      className={`text-xs font-black uppercase tracking-widest transition-colors ${
         isActive(href)
-          ? 'text-indigo-600'
-          : 'text-gray-600 hover:text-gray-900'
+          ? 'text-yellow-400'
+          : 'text-gray-400 hover:text-white'
       }`}
     >
       {label}
     </Link>
   );
 
-  // Não mostra navbar em páginas de auth ou onboarding
   const hiddenRoutes = ['/login', '/register', '/onboarding', '/choose-role'];
   if (pathname === '/' || hiddenRoutes.some(r => pathname.startsWith(r))) return null;
 
   return (
-    <nav className="bg-white border-b border-gray-100 sticky top-0 z-50">
-      <div className="max-w-6xl mx-auto px-4">
+    <nav className="bg-black border-b border-white/10 sticky top-0 z-50" style={{ fontFamily: 'Arial Black, Arial, sans-serif' }}>
+      <div className="max-w-6xl mx-auto px-6">
         <div className="flex justify-between items-center h-16">
 
           {/* Logo */}
-          <Link href="/feed" className="text-2xl font-black text-indigo-900 tracking-tight">
+          <Link href="/feed" className="text-xl font-black text-yellow-400 tracking-widest uppercase">
             DANCEHUB
           </Link>
 
-          {/* Links centrais — desktop */}
-          <div className="hidden md:flex items-center gap-6">
+          {/* Links */}
+          <div className="hidden md:flex items-center gap-8">
             {navLink('/feed', 'Feed')}
             {navLink('/artists', 'Artistas')}
             {navLink('/events', 'Eventos')}
@@ -81,46 +80,41 @@ export default function Navbar() {
           {/* Lado direito */}
           <div className="flex items-center gap-3">
             {!authChecked ? (
-              // Placeholder enquanto carrega
-              <div className="w-8 h-8 bg-gray-100 rounded-full animate-pulse" />
+              <div className="w-8 h-8 bg-white/5 animate-pulse" />
             ) : profile ? (
-              // Utilizador autenticado
               <div className="relative">
                 <button
                   onClick={() => setMenuOpen(!menuOpen)}
-                  className="flex items-center gap-2 bg-gray-50 hover:bg-gray-100 px-3 py-2 rounded-xl transition-all"
+                  className="flex items-center gap-2 border border-white/20 hover:border-yellow-400 px-3 py-2 transition-all"
                 >
-                  {/* Avatar */}
-                  <div className="w-7 h-7 rounded-lg overflow-hidden bg-indigo-100 flex items-center justify-center text-sm font-bold text-indigo-600">
+                  <div className="w-7 h-7 overflow-hidden bg-yellow-400/20 flex items-center justify-center text-sm font-black text-yellow-400">
                     {profile.avatar_url ? (
                       <img src={profile.avatar_url} alt="" className="w-full h-full object-cover" />
                     ) : (
                       profile.artistic_name?.charAt(0)?.toUpperCase() || '?'
                     )}
                   </div>
-                  <span className="font-bold text-gray-700 text-sm hidden sm:block max-w-24 truncate">
+                  <span className="font-black text-white text-xs uppercase tracking-widest hidden sm:block max-w-24 truncate">
                     {profile.artistic_name || 'Perfil'}
                   </span>
-                  <span className="text-gray-400 text-xs">▾</span>
+                  <span className="text-gray-500 text-xs">▾</span>
                 </button>
 
-                {/* Dropdown */}
                 {menuOpen && (
                   <>
-                    {/* Overlay para fechar */}
                     <div
                       className="fixed inset-0 z-40"
                       onClick={() => setMenuOpen(false)}
                     />
-                    <div className="absolute right-0 mt-2 w-52 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50">
-                      <div className="px-4 py-3 border-b border-gray-50">
-                        <p className="text-xs text-gray-400 font-medium">Conta</p>
-                        <p className="font-bold text-gray-800 text-sm truncate">
+                    <div className="absolute right-0 mt-2 w-56 bg-black border border-white/10 z-50">
+                      <div className="px-4 py-3 border-b border-white/10">
+                        <p className="text-[10px] text-gray-500 font-black uppercase tracking-widest">Conta</p>
+                        <p className="font-black text-white text-sm truncate mt-1">
                           {profile.artistic_name || 'Utilizador'}
                         </p>
-                        <span className="text-xs text-indigo-600 font-bold">
-                          {profile.user_type === 'artist' ? '🕺 Artista'
-                            : profile.user_type === 'organizer' ? '🎪 Organizador'
+                        <span className="text-[10px] text-yellow-400 font-black uppercase tracking-widest">
+                          {profile.user_type === 'artist' ? 'Artista'
+                            : profile.user_type === 'organizer' ? 'Organizador'
                             : 'Membro'}
                         </span>
                       </div>
@@ -129,34 +123,34 @@ export default function Navbar() {
                         <Link
                           href="/profile/me"
                           onClick={() => setMenuOpen(false)}
-                          className="block px-4 py-2.5 text-sm font-bold text-gray-700 hover:bg-gray-50"
+                          className="block px-4 py-3 text-xs font-black uppercase tracking-widest text-gray-400 hover:text-white hover:bg-white/5"
                         >
-                          👤 O meu perfil
+                          O meu perfil
                         </Link>
                         <Link
                           href="/profile/edit"
                           onClick={() => setMenuOpen(false)}
-                          className="block px-4 py-2.5 text-sm font-bold text-gray-700 hover:bg-gray-50"
+                          className="block px-4 py-3 text-xs font-black uppercase tracking-widest text-gray-400 hover:text-white hover:bg-white/5"
                         >
-                          ✏️ Editar perfil
+                          Editar perfil
                         </Link>
                         {profile.user_type === 'organizer' && (
                           <Link
                             href="/events/create"
                             onClick={() => setMenuOpen(false)}
-                            className="block px-4 py-2.5 text-sm font-bold text-purple-600 hover:bg-purple-50"
+                            className="block px-4 py-3 text-xs font-black uppercase tracking-widest text-yellow-400 hover:bg-yellow-400/10"
                           >
-                            ➕ Criar evento
+                            + Criar evento
                           </Link>
                         )}
                       </div>
 
-                      <div className="border-t border-gray-50 py-1">
+                      <div className="border-t border-white/10 py-1">
                         <button
                           onClick={handleLogout}
-                          className="w-full text-left px-4 py-2.5 text-sm font-bold text-red-500 hover:bg-red-50"
+                          className="w-full text-left px-4 py-3 text-xs font-black uppercase tracking-widest text-red-400 hover:bg-red-500/10"
                         >
-                          🚪 Sair
+                          Sair
                         </button>
                       </div>
                     </div>
@@ -164,17 +158,16 @@ export default function Navbar() {
                 )}
               </div>
             ) : (
-              // Não autenticado
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-3">
                 <Link
                   href="/login"
-                  className="font-bold text-gray-600 hover:text-gray-900 px-3 py-2"
+                  className="text-xs font-black uppercase tracking-widest text-gray-400 hover:text-white transition-colors"
                 >
                   Entrar
                 </Link>
                 <Link
                   href="/register"
-                  className="bg-indigo-600 text-white px-4 py-2 rounded-xl font-bold hover:bg-indigo-700 transition-all text-sm"
+                  className="bg-yellow-400 text-black px-4 py-2 font-black text-xs uppercase tracking-widest hover:bg-yellow-300 transition-all"
                 >
                   Registar
                 </Link>
